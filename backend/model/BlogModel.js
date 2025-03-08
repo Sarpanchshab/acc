@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const CourseSchema = new mongoose.Schema({
+const BlogSchema = new mongoose.Schema({
     // email: {
     //     type: String,
     //     required: true,
@@ -12,5 +12,5 @@ const CourseSchema = new mongoose.Schema({
     // },
 }, { timestamps: true });
 
-const CourseModel = mongoose.model("CourseModel", CourseSchema);
-module.exports = CourseModel;
+const BlogModel = mongoose.model("BlogModel", BlogSchema);
+module.exports =BlogModel;
