@@ -2,15 +2,17 @@ import { useState } from "react";
 import { Link } from "react-router";
 
 function Register() {
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [remember, setRemember] = useState(false);
+  
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    console.log("Name:", name);
     console.log("Email:", email);
     console.log("Password:", password);
-    console.log("Remember Me:", remember);
+    
   };
 
   return (
@@ -20,6 +22,18 @@ function Register() {
         <p className="text-gray-500 text-center mb-6">Create your account now</p>
 
         <form onSubmit={handleSubmit} className="space-y-5">
+        <div>
+            <label htmlFor="name" className="block text-sm font-medium text-gray-700">Your Name</label>
+            <input
+              type="name"
+              id="name"
+              className="w-full mt-1 p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-400 focus:outline-none"
+              placeholder="Enter your Name"
+              required
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+            />
+          </div>
           <div>
             <label htmlFor="email" className="block text-sm font-medium text-gray-700">Your Email</label>
             <input
@@ -46,17 +60,7 @@ function Register() {
             />
           </div>
 
-          <div className="flex justify-between items-center">
-            <label className="flex items-center space-x-2">
-              <input
-                type="checkbox"
-                className="w-4 h-4 border-gray-300 rounded bg-gray-50 focus:ring-2 focus:ring-green-400"
-                checked={remember}
-                onChange={(e) => setRemember(e.target.checked)}
-              />
-              <span className="text-sm text-gray-600">Remember Me</span>
-            </label>
-          </div>
+       
 
           <button
             type="submit"

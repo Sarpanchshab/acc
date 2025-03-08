@@ -5,7 +5,7 @@ function OurFeatures() {
         <section id="mu-features" className="py-12 bg-gray-100">
             <div className="container mx-auto px-4">
                 <div className="text-center mb-12">
-                    <h2 className="text-3xl font-bold text-gray-800">Hindi English Typing & Computer Skills</h2>
+                    <h2 className="text-3xl font-bold text-gray-800"> Typing Skills & Our Features</h2>
                     <p className="text-gray-600 mt-2">Prepare for CPCT and other government exams with expert-led training in Hindi and English typing, computer proficiency, and interactive learning sessions.</p>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -24,12 +24,12 @@ function OurFeatures() {
 }
 
 const features = [
-    { icon: "fa fa-book", title: "Hindi English Typing", description: "Prepare for CPCT, SSC Stenographer C&D, MP High Court Stenographer, Rajasthan High Court, JJA Exam & all Govt. exams with typing practice in both Hindi and English." },
-    { icon: "fa fa-users", title: "Expert Guidance", description: "Learn from experienced instructors who provide step-by-step guidance and personalized support for CPCT exam success." },
-    { icon: "fa fa-laptop", title: "Comprehensive Computer Skills", description: "Master MS Office, operating systems, internet basics, and essential computer skills tested in CPCT and other government exams." },
-    { icon: "fa fa-microphone", title: "Interactive Audio Lessons", description: "Improve learning with high-quality audio lessons covering key CPCT topics, explanations, and preparation tips." },
-    { icon: "fa fa-film", title: "LIVE Classes & Mock Tests", description: "Join live sessions, take practice tests, and assess your readiness with real-time CPCT mock exams." },
-    { icon: "fa fa-certificate", title: "Certification & Job Assistance", description: "Earn a recognized certification upon course completion and receive career support for government job exams requiring CPCT." }
+    { icon: "fa fa-laptop", title: "Hindi & English Typing", description: "CPCT, SSC, MP High Court Stenographer, Rajasthan High Court, JJA Exam & all Government Exams." },
+    { icon: "fa fa-film", title: "LIVE Classes & Mock Tests", description: "Join live sessions, take practice tests, and learn concept & get your doubts in the live classes" },
+    { icon: "fa fa-users", title: "Student Discussion", description: "Get access to 24*7 live discussion group with coursemates & faculty" },
+    { icon: "fa fa-comments", title: "Quiz & Assignments", description: "Practice chapter wise quizzes, full length test papers to learn and revise concepts " },
+    { icon: "fa fa-book", title: "Important E-Books", description: "Get important topics for last minutes revision in the pdf format & hardcopy also" },
+    { icon: "fa-solid fa-bell", title: "Alert & Notification", description: "Stay up-to-date & get notify everytime the course content is updated" }
 ];
 
 export default OurFeatures;

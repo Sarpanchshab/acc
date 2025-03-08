@@ -28,7 +28,7 @@ export default function SimpleCarousel() {
 
   return (
     <div 
-      className="relative w-full  mx-auto overflow-hidden rounded-lg shadow-lg bg-gray-900"
+      className="relative w-full  mx-auto overflow-hidden  shadow-lg bg-gray-900"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >

@@ -7,7 +7,7 @@ const Navbar = () => {
 
   return (
     <nav className="bg-white border-gray-200 dark:bg-gray-900">
-      <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
+      <div className="max-w-screen-2xl flex flex-wrap items-center justify-between mx-auto p-4">
         {/* Logo and Title */}
         <Link to="/" className="flex items-center space-x-3 rtl:space-x-reverse flex-nowrap">
           <img src="/img/logo.png" className="h-12 w-12 md:h-16 md:w-16" alt="logo acc" />
@@ -102,7 +102,8 @@ const Navbar = () => {
             </li>
           </ul>
         </div>
-      </div>
+     
+     </div>
     </nav>
   );
 };
