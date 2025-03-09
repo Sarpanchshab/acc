@@ -7,5 +7,5 @@ const TextSchema = new mongoose.Schema({
     },
 }, { timestamps: true });
 
-const TextModel = mongoose.model("TextModel", TextSchema);
-module.exports = TextModel;
+const TextHindiModel = mongoose.model("HindiTextModel", TextSchema);
+module.exports = TextHindiModel;

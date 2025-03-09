@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import axios from "axios";
 
 const TypingTest = () => {
@@ -13,22 +13,24 @@ const TypingTest = () => {
   const [totalTypedChars, setTotalTypedChars] = useState(0);
   const [isFinished, setIsFinished] = useState(false);
   const [showModal, setShowModal] = useState(false);
+  const [incorrectWords, setIncorrectWords] = useState([]);
 
-  // Fetch typing text
+  const textContainerRef = useRef(null);
+  const currentWordRef = useRef(null);
+
   useEffect(() => {
-    axios
-      .get("https://baconipsum.com/api/?type=meat-and-filler&paras=3")
+    axios.get("http://localhost:4700/api/getAllText")
       .then((response) => {
-        setTextSamples(response.data);
-        setText(response.data[0]);
+        if (response.data && response.data.allMessage) {
+          setTextSamples(response.data.allMessage.map((item) => item.text));
+          setText(response.data.allMessage[0]?.text || "");
+        } else {
+          console.error("Invalid API response format", response);
+        }
       })
-      .catch(() => {
-        setTextSamples(["Default fallback text in case API fails."]);
-        setText("Default fallback text in case API fails.");
-      });
+      .catch((error) => console.error("API Fetch Error:", error));
   }, []);
 
-  // Timer logic
   useEffect(() => {
     let timer;
     if (started && time > 0) {
@@ -40,21 +42,32 @@ const TypingTest = () => {
     return () => clearInterval(timer);
   }, [started, time]);
 
+  useEffect(() => {
+    if (currentWordRef.current) {
+      currentWordRef.current.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
+  }, [input]);
+
   const handleChange = (e) => {
     if (!started) setStarted(true);
     const newValue = e.target.value;
     setInput(newValue);
-    
     setTotalTypedChars(newValue.length);
+
     let errorCount = 0;
     const words = text.split(" ");
     const inputWords = newValue.split(" ");
-    
+    const incorrectIndices = [];
+
     inputWords.forEach((word, i) => {
-      if (word !== words[i]) errorCount++;
+      if (word !== words[i]) {
+        errorCount++;
+        incorrectIndices.push(i);
+      }
     });
 
     setErrors(errorCount);
+    setIncorrectWords(incorrectIndices);
   };
 
   const handleReset = () => {
@@ -65,6 +78,7 @@ const TypingTest = () => {
     setStarted(false);
     setIsFinished(false);
     setShowModal(false);
+    setIncorrectWords([]);
   };
 
   const handleNextText = () => {
@@ -76,7 +90,7 @@ const TypingTest = () => {
   };
 
   const grossWPM = ((totalTypedChars / 5) / selectedTime).toFixed(2);
-  const netWPM = (grossWPM - errors).toFixed(2);
+  const netWPM = (grossWPM - errors / selectedTime).toFixed(2);
   const accuracy = totalTypedChars > 0
     ? (((totalTypedChars / 5 - errors) / (totalTypedChars / 5)) * 100).toFixed(2)
     : 100;
@@ -85,7 +99,7 @@ const TypingTest = () => {
     <div className="flex flex-col items-center min-h-screen bg-gray-100 p-6 w-full">
       <div className="bg-white shadow-lg rounded-lg p-6 w-11/12">
         <h1 className="text-3xl font-bold text-center text-blue-600 mb-4">
-          Online Typing Test
+          English Typing Practice
         </h1>
 
         {!started && (
@@ -109,21 +123,30 @@ const TypingTest = () => {
           </div>
         )}
 
-        <div className="border p-4 rounded-lg bg-gray-50 text-lg leading-relaxed mb-4 break-words">
-          {text.split(" ").map((word, i) => (
-            <span
-              key={i}
-              className={`mr-2 ${
-                i === input.split(" ").length - 1
-                  ? "bg-yellow-300" 
-                  : input.split(" ")[i] === word
-                  ? "text-green-500"
-                  : "text-gray-900"
-              }`}
-            >
-              {word}
-            </span>
-          ))}
+        <div
+          ref={textContainerRef}
+          className="border p-4 rounded-lg overflow-y-auto bg-gray-50 text-lg leading-relaxed mb-4 break-words h-100"
+        >
+          {text.split(" ").map((word, i) => {
+            const isCurrentWord = i === input.split(" ").length - 1;
+            return (
+              <span
+                key={i}
+                ref={isCurrentWord ? currentWordRef : null}
+                className={`mr-2 ${
+                  isCurrentWord
+                    ? "bg-yellow-300 text-black font-bold"
+                    : input.split(" ")[i] === word
+                    ? "text-green-500"
+                    : incorrectWords.includes(i)
+                    ? "text-red-500"
+                    : "text-gray-900"
+                }`}
+              >
+                {word}
+              </span>
+            );
+          })}
         </div>
 
         <textarea
@@ -150,20 +173,23 @@ const TypingTest = () => {
         </div>
       </div>
 
+      {/* Results Modal */}
       {showModal && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-          <div className="bg-white p-6 rounded-lg shadow-lg w-96 text-center">
-            <h2 className="text-xl font-bold text-gray-700 mb-2">Typing Test Results</h2>
-            <p>🎯 Accuracy: {accuracy}%</p>
-            <p>🚀 Gross WPM: {grossWPM}</p>
-            <p>🏆 Net WPM: {netWPM}</p>
-            <p>❌ Errors: {errors}</p>
-            <button 
-              onClick={handleReset} 
-              className="mt-4 bg-blue-500 text-white px-4 py-2 rounded-md"
-            >
-              Try Again
-            </button>
+        <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50">
+          <div className="bg-white p-6 rounded-lg shadow-lg text-center">
+            <h2 className="text-2xl font-bold mb-4">Test Completed!</h2>
+            <p className="text-lg">🚀 Gross WPM: {grossWPM}</p>
+            <p className="text-lg">🏆 Net WPM: {netWPM}</p>
+            <p className="text-lg">🎯 Accuracy: {accuracy}%</p>
+            <p className="text-lg">❌ Errors: {errors}</p>
+            <div className="flex justify-center space-x-4 mt-4">
+              <button onClick={() => setShowModal(false)} className="bg-gray-500 text-white px-4 py-2 rounded-md">
+                Close
+              </button>
+              <button onClick={handleReset} className="bg-blue-500 text-white px-4 py-2 rounded-md">
+                Retry
+              </button>
+            </div>
           </div>
         </div>
       )}

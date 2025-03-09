@@ -7,7 +7,7 @@ function Typing() {
     <>
       <TypingEnglish />
       <TypingHindi />
-
+      
 
     </>
   )
