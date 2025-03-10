@@ -34,7 +34,7 @@ const remingtonGailMap = {
   "k": "ा", "K": "ज्ञ",
   "l": "स", "L": "स्‍",
   ";": "य", ":": "रू",
-  "'": "श्‍", "\"": "ष्‍",
+  "'": "श्‍", "\"": "ष्",
 
   // Bottom Row (ZXCVBNM,./)
   "z": "्र", "Z": "र्",
@@ -45,8 +45,8 @@ const remingtonGailMap = {
   "n": "द", "N": "छ",
   "m": "उ", "M": "ड",
   ",": "ए", "<": "ढ",
-  ".": "ण्‍", ">": "झ",
-  "/": "ध्‍", "?": "घ्‍",
+  ".": "ण्", ">": "झ",
+  "/": "ध्", "?": "घ्‍",
 
   // Spacebar
   " ": " "
@@ -63,6 +63,7 @@ function HindiTypingTest() {
   const [duration, setDuration] = useState(60);
   const [showModal, setShowModal] = useState(false);
   const textareaRef = useRef(null); // Reference for textarea
+  const currentWordRef = useRef(null);
 
   const fetchNewText = () => {
     axios.get("http://localhost:4700/api/getAllHindiText")
@@ -102,26 +103,65 @@ function HindiTypingTest() {
     return () => clearInterval(timer);
   }, [started, duration]);
 
+  useEffect(() => {
+    if (currentWordRef.current) {
+      currentWordRef.current.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
+  }, [input]);
+
+  // const handleKeyPress = (e) => {
+  //   if (!started) setStarted(true);
+
+  //   if (e.key === "Backspace") {
+  //     setInput((prev) => prev.slice(0, -1));
+  //   } else if (e.key === " ") {
+  //     e.preventDefault(); // Prevent default scrolling
+  //     setInput((prev) => prev + " "); // Add space manually
+  //   } else if (remingtonGailMap[e.key]) {
+  //     setInput((prev) => prev + remingtonGailMap[e.key]);
+  //   }
+
+  //   let errorCount = 0;
+  //   input.split("").forEach((char, i) => {
+  //     if (char !== text[i]) errorCount++;
+  //   });
+  //   setErrors(errorCount);
+  // };
+
+
   const handleKeyPress = (e) => {
     if (!started) setStarted(true);
-
+  
     if (e.key === "Backspace") {
       setInput((prev) => prev.slice(0, -1));
     } else if (e.key === " ") {
-      e.preventDefault(); // Prevent default scrolling
-      setInput((prev) => prev + " "); // Add space manually
+      e.preventDefault();
+      setInput((prev) => prev + " ");
     } else if (remingtonGailMap[e.key]) {
-      setInput((prev) => prev + remingtonGailMap[e.key]);
+      let newChar = remingtonGailMap[e.key];
+  
+      // Check if the last character is "्" (Halant/Virama)
+      let lastChar = input.slice(-1);
+      if (lastChar === "्") {
+        // Replace last character with correct half-letter combination
+        setInput((prev) => prev.slice(0, -1) + newChar);
+      } else {
+        setInput((prev) => prev + newChar);
+      }
     }
-
+  
+    // Error checking logic
     let errorCount = 0;
     input.split("").forEach((char, i) => {
       if (char !== text[i]) errorCount++;
     });
     setErrors(errorCount);
   };
+  
+  
 
-  // Auto-scroll effect
+  
+  
   useEffect(() => {
     setTimeout(() => {
       if (textareaRef.current) {
@@ -150,43 +190,46 @@ function HindiTypingTest() {
     }
   };
 
+  
   const wordsTyped = input.trim().split(" ").length;
   const accuracy = text.length > 0 ? ((text.length - errors) / text.length * 100).toFixed(2) : 100;
   const speed = time > 0 ? ((wordsTyped / (duration / 60))).toFixed(2) : 0;
   const minutes = (time / 60).toFixed(2);
 
   return (
-    <div className="p-6 mx-auto text-center" onKeyDown={handleKeyPress} tabIndex={0}>
+
+    <div className="px-10 text-center" onKeyDown={handleKeyPress} tabIndex={0}>
       <h1 className="text-3xl font-bold mb-4 text-blue-600">Hindi Typing Test (Remington Gail)</h1>
 
-      <p className="mb-4 p-2 border bg-gray-100 text-2xl h-100 overflow-auto">
-        {text.split(" ").map((word, i) => {
-          const wordsTypedArray = input.trim().split(" ");
-          const isCurrentWord = i === wordsTypedArray.length - 1;
-          const isCorrect = wordsTypedArray[i] === word;
+      <p className="mb-4 p-2 border bg-gray-100 text-xl h-120 overflow-auto">
+      {text.split(" ").map((word, i) => {
+        const wordsTypedArray = input.trim().split(" ");
+        const isCurrentWord = i === wordsTypedArray.length - (input.endsWith(" ") ? 0 : 1);
+        const isCorrect = wordsTypedArray[i] === word;
 
-          return (
-            <span
-              key={i}
-              style={{
-                color: wordsTypedArray[i]
-                  ? isCorrect
-                    ? "green"
-                    : "red"
-                  : "black",
-                backgroundColor: isCurrentWord ? "yellow" : "transparent",
-                padding: "2px",
-                borderRadius: "4px",
-                margin: "2px",
+        return (
+          <span
+            key={i}
+            ref={isCurrentWord ? currentWordRef : null}
+            style={{
+              color: wordsTypedArray[i]
+                ? isCorrect
+                  ? "green"
+                  : "red"
+                : "black",
+              backgroundColor: isCurrentWord ? "yellow" : "transparent",
+              padding: "2px 4px",
+              borderRadius: "4px",
+              marginRight: "4px",
+              display: "inline-block",
+            }}
+          >
+            {word}
+          </span>
+        );
+      })}
+    </p>
 
-              }}
-
-            >
-              {word}{" "}
-            </span>
-          );
-        })}
-      </p>
 
 
       <textarea
@@ -222,7 +265,9 @@ function HindiTypingTest() {
           </div>
         </div>
       )}
+
     </div>
+
   );
 }
 

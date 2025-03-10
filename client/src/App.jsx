@@ -3,10 +3,12 @@ import Navbar from './component/Layout/Navbar'
 import Footer from './component/Layout/Footer'
 import { Route,Routes } from 'react-router'
 import Home from './component/Home'
-import Typing from './component/Typing'
 import Login from './component/Auth/Login'
 import Register from './component/Auth/Register'
 import Contact from './component/Contact'
+import HindiTypingTest from './component/Typing/TypingHindi'
+import EnglishTyping from './component/Typing/TypingEnglish'
+
 
 
 function App() {
@@ -17,7 +19,8 @@ function App() {
     <Routes>
 
       <Route path='/' element={<Home/>}/>
-      <Route path='/typing' element={<Typing/>}/>
+      <Route path='/hindityping' element={<HindiTypingTest/>}/>
+      <Route path='/englishtyping' element={<EnglishTyping/>}/>
       <Route path='/login' element={<Login/>}/>
       <Route path='/register' element={<Register/>}/>
       <Route path='/contact' element={<Contact/>}/>

@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import axios from "axios";
 
-const TypingTest = () => {
+const EnglishTyping = () => {
   const [textSamples, setTextSamples] = useState([]);
   const [textIndex, setTextIndex] = useState(0);
   const [text, setText] = useState("");
@@ -197,4 +197,4 @@ const TypingTest = () => {
   );
 };
 
-export default TypingTest;
+export default EnglishTyping;
