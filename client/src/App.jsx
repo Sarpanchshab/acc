@@ -8,6 +8,7 @@ import Register from './component/Auth/Register'
 import Contact from './component/Contact'
 import HindiTypingTest from './component/Typing/TypingHindi'
 import EnglishTyping from './component/Typing/TypingEnglish'
+import Blog from './component/Blog/Blog'
 
 
 
@@ -24,6 +25,7 @@ function App() {
       <Route path='/login' element={<Login/>}/>
       <Route path='/register' element={<Register/>}/>
       <Route path='/contact' element={<Contact/>}/>
+      <Route path='/blog' element={<Blog/>}/>
 
     </Routes>
     <Footer/>
