@@ -5,10 +5,10 @@ const jwt = require("jsonwebtoken");
 class UserController {
   static signUp = async (req, res) => {
     try {
-      const { email, password, confirmPassword } = req.body;
+      const {name, email, password, confirmPassword } = req.body;
       // console.log(req.body);
       // Check if all fields are provided
-      if (!email || !password || !confirmPassword) {
+      if (!name || !email || !password || !confirmPassword) {
         return res
           .status(400)
           .json({ status: "failed", message: "All fields are required!" });
@@ -30,6 +30,7 @@ class UserController {
       const hashedPassword = await bcrypt.hash(password, 10);
       // Create a new user
       const userData = await UserModel.create({
+        name,
         email,
         password: hashedPassword,
       });
