@@ -112,6 +112,17 @@ class UserController {
       });
     }
   };
+  static logOut = async (req, res) => {
+    try {
+      res.clearCookie("token");
+      return res.status(200).json({
+        success: true,
+        message: "Logout Successfully.",
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
   static getUser = async (req, res) => {
     try {
       const { id } = req.UserData;
