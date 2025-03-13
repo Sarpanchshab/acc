@@ -9,14 +9,38 @@ function Contact() {
     message: "",
   });
 
+  const [loading, setLoading] = useState(false);
+  const [responseMessage, setResponseMessage] = useState("");
+
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Form Data:", formData);
-    alert("Form submitted successfully!");
+    setLoading(true);
+    setResponseMessage("");
+
+    try {
+      const response = await fetch("http://localhost:4700/api/insertcontact", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (response.ok) {
+        setResponseMessage("Form submitted successfully!");
+        setFormData({ name: "", city: "", address: "", email: "", message: "" });
+      } else {
+        setResponseMessage("Error submitting form. Please try again.");
+      }
+    } catch (error) {
+      setResponseMessage("Network error. Please check your connection.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -25,77 +49,48 @@ function Contact() {
         <h2 className="text-3xl font-bold text-gray-800 text-center">Contact Us</h2>
         <p className="text-gray-500 text-center mb-6">We'd love to hear from you!</p>
 
+        {responseMessage && (
+          <p className={`text-center mb-4 ${responseMessage.includes("error") ? "text-red-500" : "text-green-500"}`}>
+            {responseMessage}
+          </p>
+        )}
+
         <form onSubmit={handleSubmit} className="space-y-5">
-          <div>
-            <label className="block text-sm font-medium text-gray-700">Name</label>
-            <input
-              type="text"
-              name="name"
-              className="w-full mt-1 p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-400 focus:outline-none"
-              placeholder="Enter your name"
-              required
-              value={formData.name}
-              onChange={handleChange}
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700">City</label>
-            <input
-              type="text"
-              name="city"
-              className="w-full mt-1 p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-400 focus:outline-none"
-              placeholder="Enter your city"
-              required
-              value={formData.city}
-              onChange={handleChange}
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700">Address</label>
-            <input
-              type="text"
-              name="address"
-              className="w-full mt-1 p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-400 focus:outline-none"
-              placeholder="Enter your address"
-              required
-              value={formData.address}
-              onChange={handleChange}
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700">Email</label>
-            <input
-              type="email"
-              name="email"
-              className="w-full mt-1 p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-400 focus:outline-none"
-              placeholder="Enter your email"
-              required
-              value={formData.email}
-              onChange={handleChange}
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700">Message</label>
-            <textarea
-              name="message"
-              rows="4"
-              className="w-full mt-1 p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-400 focus:outline-none"
-              placeholder="Write your message..."
-              required
-              value={formData.message}
-              onChange={handleChange}
-            ></textarea>
-          </div>
+          {["name", "city", "address", "email", "message"].map((field) => (
+            <div key={field}>
+              <label className="block text-sm font-medium text-gray-700">
+                {field.charAt(0).toUpperCase() + field.slice(1)}
+              </label>
+              {field === "message" ? (
+                <textarea
+                  name={field}
+                  rows="4"
+                  className="w-full mt-1 p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-400 focus:outline-none"
+                  placeholder={`Enter your ${field}`}
+                  required
+                  value={formData[field]}
+                  onChange={handleChange}
+                ></textarea>
+              ) : (
+                <input
+                  type={field === "email" ? "email" : "text"}
+                  name={field}
+                  className="w-full mt-1 p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-400 focus:outline-none"
+                  placeholder={`Enter your ${field}`}
+                  required
+                  value={formData[field]}
+                  onChange={handleChange}
+                />
+              )}
+            </div>
+          ))}
 
           <button
             type="submit"
-            className="w-full bg-purple-500 text-white py-3 rounded-lg font-semibold hover:bg-purple-600 transition"
+            className="w-full bg-purple-500 text-white py-3 rounded-lg font-semibold hover:bg-purple-600 transition disabled:opacity-50"
+            disabled={loading}
           >
-            Send Message
+            {loading ? "Sending..." : "Send Message"}
           </button>
         </form>
       </div>

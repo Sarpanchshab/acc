@@ -1,18 +1,39 @@
 import { useState } from "react";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router-dom"; // Fixed import
+import axios from "axios"; // Import Axios for API calls
+
 
 function Register() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  
+  const [confirmPassword, setConfirmpassword] = useState("");
+  const [error, setError] = useState("");
+  const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Name:", name);
-    console.log("Email:", email);
-    console.log("Password:", password);
-    
+    setError("");
+
+    if (password !== confirmPassword) {
+      setError("Passwords do not match");
+      return;
+    }
+
+    try {
+      const response = await axios.post("http://localhost:4700/api/signUp", {
+        name,
+        email,
+        password,
+        confirmPassword
+      });
+      console.log("Signup successful:", response.data.data);
+      alert("Registration successful!");
+      navigate('/login')
+    } catch (err) {
+      console.error("Signup error:", err.response?.data || err.message);
+      setError(err.response?.data?.message || "Signup failed. Please try again.");
+    }
   };
 
   return (
@@ -20,12 +41,12 @@ function Register() {
       <div className="bg-white shadow-2xl rounded-2xl p-8 max-w-sm w-full">
         <h2 className="text-2xl font-bold text-gray-800 text-center">Join Us</h2>
         <p className="text-gray-500 text-center mb-6">Create your account now</p>
-
+        {error && <p className="text-red-500 text-center">{error}</p>}
         <form onSubmit={handleSubmit} className="space-y-5">
-        <div>
-            <label htmlFor="name" className="block text-sm font-medium text-gray-700">Your Name</label>
+          <div>
+            <label htmlFor="name" className="block text-sm font-medium text-gray-700">Name</label>
             <input
-              type="name"
+              type="text"
               id="name"
               className="w-full mt-1 p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-400 focus:outline-none"
               placeholder="Enter your Name"
@@ -35,7 +56,7 @@ function Register() {
             />
           </div>
           <div>
-            <label htmlFor="email" className="block text-sm font-medium text-gray-700">Your Email</label>
+            <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email</label>
             <input
               type="email"
               id="email"
@@ -46,9 +67,8 @@ function Register() {
               onChange={(e) => setEmail(e.target.value)}
             />
           </div>
-
           <div>
-            <label htmlFor="password" className="block text-sm font-medium text-gray-700">Your Password</label>
+            <label htmlFor="password" className="block text-sm font-medium text-gray-700">Password</label>
             <input
               type="password"
               id="password"
@@ -59,16 +79,24 @@ function Register() {
               onChange={(e) => setPassword(e.target.value)}
             />
           </div>
-
-       
-
+          <div>
+            <label htmlFor="confirmpassword" className="block text-sm font-medium text-gray-700">Confirm Password</label>
+            <input
+              type="password"
+              id="confirmpassword"
+              className="w-full mt-1 p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-400 focus:outline-none"
+              placeholder="Confirm your password"
+              required
+              value={confirmPassword}
+              onChange={(e) => setConfirmpassword(e.target.value)}
+            />
+          </div>
           <button
             type="submit"
             className="w-full bg-green-500 text-white py-3 rounded-lg font-semibold hover:bg-green-600 transition"
           >
             Register
           </button>
-
           <p className="text-center text-sm text-gray-500">
             Already have an account? <Link to="/login" className="text-green-600 hover:underline">Log In</Link>
           </p>

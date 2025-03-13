@@ -123,6 +123,7 @@ class UserController {
       console.log(error);
     }
   };
+
   static getUser = async (req, res) => {
     try {
       const { id } = req.UserData;
@@ -138,5 +139,6 @@ class UserController {
         .json({ status: "failed", message: "Internal server error." });
     }
   };
+  
 }
 module.exports = UserController;

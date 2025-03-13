@@ -1,24 +1,40 @@
 import { useState } from "react";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
 
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [remember, setRemember] = useState(false);
+  const [error, setError] = useState("");
+  const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Email:", email);
-    console.log("Password:", password);
-    console.log("Remember Me:", remember);
+    setError("");
+
+    try {
+      const response = await axios.post("http://localhost:4700/api/signIn", {
+        email,
+        password,
+      });
+
+      const { token } = response.data.user;
+      localStorage.setItem("authToken", token); // Store token for authentication
+      alert("Login successful!");
+      navigate("/dashboard"); // Redirect to dashboard after login
+    } catch (err) {
+      console.error("Login error:", err.response?.data || err.message);
+      setError(err.response?.data?.message || "Invalid credentials. Please try again.");
+    }
   };
 
   return (
-    <div className="flex items-center justify-center  bg-gradient-to-r from-blue-500 to-purple-600 p-4">
+    <div className="flex items-center justify-center bg-gradient-to-r from-blue-500 to-purple-600 p-4">
       <div className="bg-white shadow-xl rounded-2xl p-8 max-w-sm w-full">
         <h2 className="text-2xl font-bold text-gray-800 text-center">Welcome Back</h2>
         <p className="text-gray-500 text-center mb-6">Sign in to continue</p>
-
+        {error && <p className="text-red-500 text-center">{error}</p>}
         <form onSubmit={handleSubmit} className="space-y-5">
           <div>
             <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email Address</label>

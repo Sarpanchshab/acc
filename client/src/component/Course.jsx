@@ -1,9 +1,15 @@
 import React from 'react'
-import BestCourse from './Home/BestCourse'
+import CourseDisplay from './Admin Dashboard/CourseDisplay'
+
+
 
 function Course() {
   return (
-    <BestCourse/>
+
+  <>
+
+  <CourseDisplay/>
+  </>
   )
 }
 

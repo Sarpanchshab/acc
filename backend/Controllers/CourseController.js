@@ -1,6 +1,7 @@
 const CourseModel = require("../model/Course");
 const cloudinary = require("cloudinary").v2;
 class CourseController {
+
   static InsertCourse = async (req, res) => {
     try {
       //   console.log(req.files)
@@ -20,7 +21,7 @@ class CourseController {
         },
       });
       await data.save();
-      res.status(201).json({
+      res.status(200).json({
         status: "success",
         message: "Course added Successfully",
       });
@@ -28,6 +29,7 @@ class CourseController {
       res.send(error);
     }
   };
+
   static GetAllCourse = async (req, res) => {
     try {
       // Get all course
@@ -43,6 +45,22 @@ class CourseController {
       res.send(error);
     }
   };
+
+  static GetNumberCourse = async (req, res) => {
+    try {
+        // Get the 3 most recent courses
+        const recentCourses = await CourseModel.find().sort({ _id: -1 }).limit(3);
+        
+        res.status(200).json({
+            status: true,
+            recentCourses, // Return only the last 3 courses
+        });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+};
+
+
   static DeleteCourse = async (req, res) => {
     try {
       const { id } = req.params;

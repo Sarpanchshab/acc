@@ -5,6 +5,7 @@ const TextController = require("../Controllers/TextController");
 const TextHindiController = require("../Controllers/HindiTextControlller");
 const CourseController = require("../Controllers/CourseController");
 const BlogController = require("../Controllers/BlogController");
+const ContactController = require("../Controllers/ContactController");
 const router = express.Router();
 
 //User Routes
@@ -24,13 +25,19 @@ router.get("/getAllHindiText", TextHindiController.GetAllHindiText);
 router.delete("/DeleteHindiText/:id",verifyToken, TextHindiController.DeleteHindiText);
 
 // Course ROUTES
-router.post("/insertCourse",verifyToken, CourseController.InsertCourse);
+router.post("/insertCourse", CourseController.InsertCourse);
 router.get("/getAllCourse", CourseController.GetAllCourse);
+router.get("/getNumberCourse", CourseController.GetNumberCourse);
 router.delete("/DeleteCourse/:id",verifyToken, CourseController.DeleteCourse);
 
 // Blog ROUTES
-router.post("/insertBlog",verifyToken, BlogController.InsertBlog);
-router.get("/getAllCourse", BlogController.GetAllBlog);
-router.delete("/DeleteCourse/:id",verifyToken, BlogController.DeleteBlog);
+router.post("/insertBlog", BlogController.InsertBlog);
+router.get("/getAllBlog", BlogController.GetAllBlog);
+router.get("/blogview/:id",BlogController.BlogView);
+router.delete("/DeleteBlog/:id",verifyToken, BlogController.DeleteBlog);
+
+
+// Contact Controller
+router.post("/insertcontact", ContactController.InsertMessage);
 
 module.exports = router;
