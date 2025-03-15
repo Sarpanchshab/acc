@@ -7,7 +7,7 @@ const verifyToken = async (req, res, next) => {
     res.status(401).json({ status: "failed", message: "Unauthorized Login!" });
   } else {
     const data = jwt.verify(token, process.env.JWT_SECRET);
-    const userData = await UserModel.findOne({ _id: data.ID });
+    const userData = await UserModel.findOne({ _id: data.ID });//id uth kr aayehi issi se token bana hai
     req.UserData = userData;
     next();
   }

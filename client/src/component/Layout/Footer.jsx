@@ -1,10 +1,20 @@
-import { FaFacebookF, FaTwitter, FaInstagram, FaLinkedinIn, FaMapMarkerAlt, FaPhoneAlt, FaEnvelope, FaGlobe } from "react-icons/fa";
+import { useContext } from "react";
+import { Context } from "../../main"; // Import Context for authentication check
+import { 
+  FaFacebookF, FaTwitter, FaInstagram, FaLinkedinIn, 
+  FaMapMarkerAlt, FaPhoneAlt, FaEnvelope, FaGlobe 
+} from "react-icons/fa";
 
 const Footer = () => {
+  const { isAuthorized } = useContext(Context); // Get authentication state
+
+  if (isAuthorized) return null; // ✅ Hide footer when user is logged in
+
   return (
     <footer className="relative bg-gradient-to-br from-gray-800 to-gray-900 text-white py-12 overflow-hidden">
       <div className="container mx-auto px-6 relative z-10">
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-10">
+          
           {/* About Section */}
           <div className="transition-transform transform hover:scale-105">
             <h4 className="text-xl font-semibold mb-4 border-b-2 border-blue-500 pb-2">About Us</h4>

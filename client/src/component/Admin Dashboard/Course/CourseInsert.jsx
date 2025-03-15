@@ -31,7 +31,7 @@ function CourseInsert() {
     data.append("image", formData.image);
 
     try {
-      const response = await axios.post("http://localhost:4700/api/", data, {
+      const response = await axios.post("/api/insertCourse", data, {
         headers: { "Content-Type": "multipart/form-data" },
       });
 
@@ -50,7 +50,7 @@ function CourseInsert() {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100 p-6">
+    <div className="flex items-center justify-center  bg-gray-100 p-6">
       <Toaster /> {/* Toaster component */}
       <div className="bg-white shadow-lg rounded-xl p-6 max-w-lg w-full">
         <h2 className="text-2xl font-bold text-gray-800 text-center mb-4">Add New Course</h2>

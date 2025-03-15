@@ -1,8 +1,11 @@
-import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useState, useContext } from "react";
+import { Link, useNavigate, } from "react-router-dom";
 import axios from "axios";
+import { Context } from "../../main"; // Ensure this path is correct
+import toast from "react-hot-toast"
 
 function Login() {
+  const { setIsAuthorized } = useContext(Context); // Get authentication state from context
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [remember, setRemember] = useState(false);
@@ -12,22 +15,48 @@ function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
-
+  
     try {
-      const response = await axios.post("http://localhost:4700/api/signIn", {
-        email,
-        password,
-      });
-
-      const { token } = response.data.user;
-      localStorage.setItem("authToken", token); // Store token for authentication
-      alert("Login successful!");
-      navigate("/dashboard"); // Redirect to dashboard after login
+      const response = await axios.post(
+        "/api/signIn",
+        { email, password },
+        { withCredentials: true } // ✅ Ensures cookies are included
+      );
+  
+      console.log("🟢 Login Response:", response.data); // Debugging
+  
+      // ✅ Extract user object & token from response
+      const { user } = response.data;
+  
+      if (!user || !user.role) {
+        setError("User role not found. Please contact support.");
+        return;
+      }
+      
+      localStorage.setItem("token", response.data.token)
+      // ✅ Update authentication state
+      setIsAuthorized(true);
+  
+      // ✅ Navigate based on user role
+      switch (user.role) {
+        case "admin":
+          toast.success("Login admin successful!");
+          navigate("/admin", { replace: true });
+          break;
+        case "student":
+          toast.success("Login student successful!");
+          navigate("/studentdashboard", { replace: true });
+          break;
+        default:
+          setError("Unauthorized role. Please contact support.");
+      }
     } catch (err) {
-      console.error("Login error:", err.response?.data || err.message);
+      console.error("❌ Login error:", err.response?.data || err.message);
       setError(err.response?.data?.message || "Invalid credentials. Please try again.");
     }
   };
+  
+
 
   return (
     <div className="flex items-center justify-center bg-gradient-to-r from-blue-500 to-purple-600 p-4">

@@ -14,7 +14,14 @@ cloudinary.config({
 
 // for connectivity to react
 const cors = require('cors')
-app.use(cors())
+// app.use(cors())
+
+app.use(
+  cors({
+    origin: "http://localhost:5173", // Frontend URL (Vite default port)
+    credentials: true, // Allow cookies to be sent
+  })
+);
 
 // fileuploader for image
 const fileuploader = require('express-fileupload')

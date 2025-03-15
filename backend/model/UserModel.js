@@ -14,6 +14,12 @@ const UserSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    role :{
+        type: String,
+        required: true,
+        default:"student",
+    },
+
 }, { timestamps: true });
 
 const UserModel = mongoose.model("User.model", UserSchema);

@@ -19,7 +19,7 @@ const EnglishTyping = () => {
   const currentWordRef = useRef(null);
 
   useEffect(() => {
-    axios.get("http://localhost:4700/api/getAllText")
+    axios.get("/api/getAllText")
       .then((response) => {
         if (response.data && response.data.allMessage) {
           setTextSamples(response.data.allMessage.map((item) => item.text));

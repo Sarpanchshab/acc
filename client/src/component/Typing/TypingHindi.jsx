@@ -412,7 +412,7 @@ const HindiTypingTest = () => {
   const currentWordRef = useRef(null);
 
   useEffect(() => {
-    axios.get("http://localhost:4700/api/getAllHindiText")
+    axios.get("/api/getAllHindiText")
       .then((response) => {
         if (response.data && response.data.allMessage) {
           setTextSamples(response.data.allMessage.map((item) => item.text));
@@ -518,7 +518,7 @@ const HindiTypingTest = () => {
 
         <div
           ref={textContainerRef}
-          className="border p-4 rounded-lg overflow-y-auto bg-gray-50 text-lg leading-relaxed mb-4 break-words h-100"
+          className="border p-4 rounded-lg overflow-y-auto bg-gray-50 text-lg leading-relaxed mb-4 break-words h-100 text-justify"
         >
           {text.split(" ").map((word, i) => {
             const isCurrentWord = i === input.split(" ").length - 1;

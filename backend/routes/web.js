@@ -12,7 +12,7 @@ const router = express.Router();
 router.post("/signUp", UserController.signUp);
 router.post("/signIn", UserController.signIn);
 router.get("/getUser",verifyToken, UserController.getUser);
-router.get("/logout",verifyToken,UserController.logOut)
+router.post("/logout",verifyToken,UserController.logout)
 
 //Message English ROUTES
 router.post("/insertText",verifyToken, TextController.InsertText);
@@ -28,16 +28,18 @@ router.delete("/DeleteHindiText/:id",verifyToken, TextHindiController.DeleteHind
 router.post("/insertCourse", CourseController.InsertCourse);
 router.get("/getAllCourse", CourseController.GetAllCourse);
 router.get("/getNumberCourse", CourseController.GetNumberCourse);
-router.delete("/DeleteCourse/:id",verifyToken, CourseController.DeleteCourse);
+router.delete("/DeleteCourse/:id", CourseController.DeleteCourse);
+router.put("/updatecourse/:id",CourseController.updateCourse)
 
 // Blog ROUTES
 router.post("/insertBlog", BlogController.InsertBlog);
 router.get("/getAllBlog", BlogController.GetAllBlog);
 router.get("/blogview/:id",BlogController.BlogView);
-router.delete("/DeleteBlog/:id",verifyToken, BlogController.DeleteBlog);
+router.delete("/deleteBlog/:id", BlogController.DeleteBlog);
 
 
 // Contact Controller
 router.post("/insertcontact", ContactController.InsertMessage);
+router.get("/getallmessage",ContactController.GetAllMessage)
 
 module.exports = router;

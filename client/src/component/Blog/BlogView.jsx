@@ -10,7 +10,7 @@ const BlogView = () => {
     // Fetch blog post details from API
     const fetchPost = async () => {
       try {
-        const response = await fetch(`http://localhost:4700/api/blogview/${postId}`);
+        const response = await fetch(`/api/blogview/${postId}`);
         const data = await response.json();
         setPost(data.data);
         console.log(data)
@@ -34,29 +34,53 @@ const BlogView = () => {
 
   return (
     <div className="flex justify-center items-center bg-gray-100 p-6 my-20">
-  <div className="max-w-6xl w-full bg-white rounded-xl shadow-lg p-6 transition-transform transform hover:scale-105 hover:shadow-2xl">
-    <h1 className="text-3xl font-bold mb-4 underline text-red-500">{post.name}</h1>
-
-    <p className="text-gray-700 leading-relaxed text-lg ">
-      <span className="font-semibold text-gray-700">Important Dates: </span>{post.importantDates}
-    </p>
-
-    <p className="text-lg leading-relaxed text-gray-700">
-      <span className="font-semibold text-gray-800">Qualification: </span>{post.qualification}
-    </p>
-
-    <p className="text-lg leading-relaxed text-gray-700">
-      <span className="font-semibold text-gray-800">Apply Form: </span>{post.applyForm}
-    </p>
-
-    <p className="text-lg leading-relaxed text-blue-500 cursor-pointer">
-      <span className="font-semibold text-gray-800">Download Link: </span>
-      <a href={post.downloadLink} className="underline" target="_blank" rel="noopener noreferrer">
-        {post.downloadLink}
-      </a>
-    </p>
+    <div className="max-w-6xl w-full bg-white rounded-xl shadow-lg p-6 transition-transform transform hover:scale-105 hover:shadow-2xl">
+      {/* Ensure post exists before rendering */}
+      {post && (
+        <>
+          {/* Post Title */}
+          <h1 className="text-3xl font-bold mb-4 underline text-red-500">
+            {post.name || "No Title Available"}
+          </h1>
+  
+          {/* Important Dates */}
+          {post.importantDates && (
+            <p className="text-gray-700 leading-relaxed text-lg">
+              <span className="font-semibold text-gray-700">Important Dates: </span>
+              {post.importantDates}
+            </p>
+          )}
+  
+          {/* Qualification */}
+          {post.qualification && (
+            <p className="text-lg leading-relaxed text-gray-700">
+              <span className="font-semibold text-gray-800">Qualification: </span>
+              {post.qualification}
+            </p>
+          )}
+  
+          {/* Apply Form */}
+          {post.applyForm && (
+            <p className="text-lg leading-relaxed text-gray-700">
+              <span className="font-semibold text-gray-800">Apply Form: </span>
+              {post.applyForm}
+            </p>
+          )}
+  
+          {/* Download Link */}
+          {post.downloadLink && (
+            <p className="text-lg leading-relaxed text-blue-500 cursor-pointer">
+              <span className="font-semibold text-gray-800">Download Link: </span>
+              <a href={post.downloadLink} className="underline" target="_blank" rel="noopener noreferrer">
+                {post.downloadLink}
+              </a>
+            </p>
+          )}
+        </>
+      )}
+    </div>
   </div>
-</div>
+  
 
   );
 };

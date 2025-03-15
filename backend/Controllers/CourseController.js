@@ -46,40 +46,82 @@ class CourseController {
     }
   };
 
+  static updateCourse= async (req, res)=> {
+    try {
+      const { id } = req.params;
+      const { title, duration, price } = req.body;
+
+      // Validate input
+      if (!title || !duration || !price) {
+        return res.status(400).json({ status: "failed", message: "All fields are required." });
+      }
+
+      // Find and update the course (excluding image)
+      const updatedCourse = await CourseModel.findByIdAndUpdate(
+        id,
+        { title, duration, price }, // Do not update image
+        { new: true, runValidators: true }
+      );
+
+      if (!updatedCourse) {
+        return res.status(404).json({ status: "failed", message: "Course not found." });
+      }
+
+      return res.status(200).json({
+        status: "success",
+        message: "Course updated successfully!",
+        updatedCourse,
+      });
+    } catch (error) {
+      console.error("Error updating course:", error);
+      return res.status(500).json({ status: "failed", message: "Internal server error." });
+    }
+  }
+
   static GetNumberCourse = async (req, res) => {
     try {
-        // Get the 3 most recent courses
-        const recentCourses = await CourseModel.find().sort({ _id: -1 }).limit(3);
-        
-        res.status(200).json({
-            status: true,
-            recentCourses, // Return only the last 3 courses
-        });
-    } catch (error) {
-        res.status(500).json({ error: error.message });
-    }
-};
+      // Get the 3 most recent courses
+      const recentCourses = await CourseModel.find().sort({ _id: -1 }).limit(3);
 
+      res.status(200).json({
+        status: true,
+        recentCourses, // Return only the last 3 courses
+      });
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  };
 
   static DeleteCourse = async (req, res) => {
     try {
       const { id } = req.params;
-      if (!id) {
-        return res
-          .status(400)
-          .json({ status: "failed", message: "Course not found" });
+      const course = await CourseModel.findById(id);
+
+      if (!course) {
+        return res.status(404).json({
+          status: "error",
+          message: "Course not found",
+        });
       }
+
+      // Delete image from Cloudinary
+      await cloudinary.uploader.destroy(course.image.public_id);
+
+      // Remove course from database
       await CourseModel.findByIdAndDelete(id);
-      return res
-        .status(200)
-        .json({ status: "success", message: "Course deleted successfully" });
+
+      res.status(200).json({
+        status: "success",
+        message: "Course deleted successfully",
+      });
     } catch (error) {
-      console.error(error);
-      return res
-        .status(500)
-        .json({ status: "failed", message: "Internal server error." });
+      res.status(500).json({
+        status: "error",
+        message: error.message,
+      });
     }
   };
+
 }
 
 module.exports = CourseController;

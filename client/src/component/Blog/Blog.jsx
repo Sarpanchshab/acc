@@ -9,9 +9,9 @@ const Blog = () => {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    axios.get("http://localhost:4700/api/getAllBlog")
+    axios.get("/api/getAllBlog")
       .then((res) => {
-        console.log("API Response:", res.data.allBlog); // Debugging
+        // console.log("API Response:", res.data.allBlog); // Debugging
         if (Array.isArray(res.data.allBlog)) {
           setPosts(res.data.allBlog);
         } else {
@@ -35,16 +35,17 @@ const Blog = () => {
         <h1 className="text-3xl md:text-5xl font-extrabold text-center mb-6 md:mb-8 text-yellow-400 drop-shadow-lg">
           LATEST VACANCY & IMPORTANT UPDATES
         </h1>
+
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
           {posts.map((post) => (
             <motion.div
-              key={post.id}
+              key={post._id} // ✅ Fixed: Using _id instead of id
               className="p-4 md:p-6 border rounded-xl shadow-xl bg-gray-100 transition-all duration-200 relative overflow-hidden group hover:shadow-2xl"
               whileHover={{ scale: 1.05 }}
             >
               <div className="absolute inset-0 opacity-0 group-hover:opacity-30 transition-opacity duration-300 rounded-xl"></div>
               <Link
-                to={`/blogview/`+ post._id}
+                to={`/blogview/${post._id}`} // ✅ Fixed: Template literals for cleaner code
                 className="text-base md:text-lg hover:underline font-semibold text-blue-500 hover:text-black transition-colors duration-150 relative z-10"
               >
                 {post.name}
@@ -52,9 +53,11 @@ const Blog = () => {
             </motion.div>
           ))}
         </div>
+
+
       </div>
     </div>
-   
+
   );
 };
 

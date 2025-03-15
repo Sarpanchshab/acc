@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom"; // Fixed import
 import axios from "axios"; // Import Axios for API calls
-
+import toast from "react-hot-toast"
 
 function Register() {
   const [name, setName] = useState("");
@@ -21,15 +21,21 @@ function Register() {
     }
 
     try {
-      const response = await axios.post("http://localhost:4700/api/signUp", {
+      const response = await axios.post("/api/signUp", {
         name,
         email,
         password,
         confirmPassword
-      });
+      },{ withCredentials: true } // ✅ Send cookies
+      );
+  
       console.log("Signup successful:", response.data.data);
-      alert("Registration successful!");
-      navigate('/login')
+  
+      // ✅ Store token in localStorage or cookies
+      localStorage.setItem("token", response.data.token);  
+  
+      toast.success("Registration successful!");
+      navigate('/login');
     } catch (err) {
       console.error("Signup error:", err.response?.data || err.message);
       setError(err.response?.data?.message || "Signup failed. Please try again.");
