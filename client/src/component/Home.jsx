@@ -14,8 +14,9 @@ function Home() {
     <>
     <Slider/>
     <HomeMarquee/>
-    <LatestCourse/>
+    
     <OurFeatures/>
+    <LatestCourse/>
     <Counter/>
     <StudentReview/>
     <AppSection/>

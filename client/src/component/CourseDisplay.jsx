@@ -1,12 +1,15 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { toast } from "react-hot-toast";
+import { Context } from "../main";  // Import the Context from your app
+
 
 function CourseDisplay() {
     const [courses, setCourses] = useState([]);
-    const [visibleCourses, setVisibleCourses] = useState(12); // Initially show 12 courses
+    const [visibleCourses, setVisibleCourses] = useState(9); // Initially show 12 courses
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
+
 
     useEffect(() => {
         const fetchCourses = async () => {
@@ -27,7 +30,7 @@ function CourseDisplay() {
 
     // Function to show more courses
     const showMoreCourses = () => {
-        setVisibleCourses((prev) => prev + 12);
+        setVisibleCourses((prev) => prev + 9);
     };
 
     return (
@@ -41,15 +44,21 @@ function CourseDisplay() {
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-6">
                     {courses.length > 0 ? (
                         courses.slice(0, visibleCourses).map((course) => (
-                            <div key={course._id} className="bg-white shadow-lg rounded-lg p-4 flex flex-col items-center">
-                                <img
+                            <div key={course._id} className="bg-white shadow-lg rounded-lg p-4 flex flex-col ">
+                               <img
                                     src={course.image?.url || "/default-image.jpg"}
-                                    alt={course.title || "Course"}
-                                    className="w-full h-40 object-cover rounded-md mb-4"
+                                    alt={course.title}
+                                    className="w-full h-56 object-contain bg-white"
                                 />
-                                <h3 className="text-xl font-bold text-gray-700 text-center">{course.title || "No Title"}</h3>
+                                <h3 className="text-xl font-bold text-gray-700 ">{course.title || "No Title"}</h3>
                                 <p className="text-gray-600">Duration: {course.duration || "N/A"}</p>
                                 <p className="text-gray-800 font-semibold">Price: {course.price || "Free"}</p>
+                                <button
+                                    className="mt-4 px-6 py-2 bg-green-600 text-white font-semibold rounded-md shadow-md hover:bg-green-700 transition"
+                                 href=""  >
+                                    Get This Course
+                                </button>
+
                             </div>
                         ))
                     ) : (

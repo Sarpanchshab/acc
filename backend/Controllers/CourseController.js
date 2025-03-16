@@ -81,7 +81,7 @@ class CourseController {
   static GetNumberCourse = async (req, res) => {
     try {
       // Get the 3 most recent courses
-      const recentCourses = await CourseModel.find().sort({ _id: -1 }).limit(3);
+      const recentCourses = await CourseModel.find();
 
       res.status(200).json({
         status: true,

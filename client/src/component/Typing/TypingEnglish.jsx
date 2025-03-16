@@ -14,6 +14,10 @@ const EnglishTyping = () => {
   const [isFinished, setIsFinished] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [incorrectWords, setIncorrectWords] = useState([]);
+  const [ setCurrentPage] = useState(1);
+  const [currentPageGroup,] = useState(0); // each group = 5 pages
+
+
 
   const textContainerRef = useRef(null);
   const currentWordRef = useRef(null);
@@ -81,13 +85,6 @@ const EnglishTyping = () => {
     setIncorrectWords([]);
   };
 
-  const handleNextText = () => {
-    if (textIndex < textSamples.length - 1) {
-      setTextIndex(textIndex + 1);
-      setText(textSamples[textIndex + 1]);
-      handleReset();
-    }
-  };
 
   const grossWPM = ((totalTypedChars / 5) / selectedTime).toFixed(2);
   const netWPM = (grossWPM - errors / selectedTime).toFixed(2);
@@ -133,15 +130,14 @@ const EnglishTyping = () => {
               <span
                 key={i}
                 ref={isCurrentWord ? currentWordRef : null}
-                className={`mr-2 ${
-                  isCurrentWord
-                    ? "bg-yellow-300 text-black font-bold"
-                    : input.split(" ")[i] === word
+                className={`mr-2 ${isCurrentWord
+                  ? "bg-yellow-300 text-black font-bold"
+                  : input.split(" ")[i] === word
                     ? "text-green-500"
                     : incorrectWords.includes(i)
-                    ? "text-red-500"
-                    : "text-gray-900"
-                }`}
+                      ? "text-red-500"
+                      : "text-gray-900"
+                  }`}
               >
                 {word}
               </span>
@@ -159,18 +155,78 @@ const EnglishTyping = () => {
 
         <p className="mt-4 text-center text-lg font-semibold text-gray-800">
           ⏳ Time Left: {time}s | 📝 Typed: {totalTypedChars} chars |
-          ❌ Errors: {errors} | 🎯 Accuracy: {accuracy}% | 🚀 Gross WPM: {grossWPM} | 
+          ❌ Errors: {errors} | 🎯 Accuracy: {accuracy}% | 🚀 Gross WPM: {grossWPM} |
           🏆 Net WPM: {netWPM}
         </p>
 
-        <div className="flex space-x-4 mt-4">
-          <button onClick={handleNextText} className="bg-gray-500 text-white px-4 py-2 rounded-md">
+
+        <div className="flex flex-wrap justify-center space-x-2 mt-6">
+
+          {/* Previous Button */}
+          <button
+            onClick={() => {
+              if (textIndex > 0) {
+                setTextIndex(textIndex - 1);
+                setText(textSamples[textIndex - 1]);
+                setCurrentPage(textIndex);
+                handleReset();
+              }
+            }}
+            className={`px-2 py-1 text-sm rounded ${textIndex === 0 ? 'bg-gray-400' : 'bg-blue-500'} text-white`}
+            disabled={textIndex === 0}
+          >
+            Prev
+          </button>
+
+      
+          {/* Page Number Buttons */}
+          {textSamples
+            .slice(currentPageGroup * 5, currentPageGroup * 5 + 5) // Show only 5
+            .map((_, i) => {
+              const realIndex = currentPageGroup * 5 + i;
+              return (
+                <button
+                  key={realIndex}
+                  onClick={() => {
+                    setTextIndex(realIndex);
+                    setText(textSamples[realIndex]);
+                    setCurrentPage(realIndex + 1);
+                    handleReset();
+                  }}
+                  className={`px-2 py-1 text-sm rounded ${textIndex === realIndex ? 'bg-blue-700' : 'bg-blue-500'} text-white`}
+                >
+                  {realIndex + 1}
+                </button>
+              );
+            })}
+
+          {/* Next Button */}
+          <button
+            onClick={() => {
+              if (textIndex < textSamples.length - 1) {
+                setTextIndex(textIndex + 1);
+                setText(textSamples[textIndex + 1]);
+                setCurrentPage(textIndex + 2);
+                handleReset();
+              }
+            }}
+            className={`px-2 py-1 text-sm rounded ${textIndex === textSamples.length - 1 ? 'bg-gray-400' : 'bg-blue-500'} text-white`}
+            disabled={textIndex === textSamples.length - 1}
+          >
             Next
           </button>
-          <button onClick={handleReset} className="bg-blue-500 text-white px-4 py-2 rounded-md">
+
+          {/* Reset Button */}
+          <button
+            onClick={handleReset}
+            className="bg-green-500 text-white px-2 py-1 text-sm rounded"
+          >
             Reset
           </button>
+
         </div>
+
+
       </div>
 
       {/* Results Modal */}

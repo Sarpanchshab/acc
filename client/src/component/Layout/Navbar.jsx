@@ -1,21 +1,41 @@
-import { useContext, useState } from "react";
-import { Link } from "react-router-dom";
-import { Context } from "../../main";
+import { useState } from "react";
+import { Link, useLocation,  } from "react-router-dom";
 
-
+// import {useNavigate} from "react-router-dom"
+// import { Context } from "../../main";
+// import { useContext } from "react";
+// import axios from 'axios'
+// import toast from "react-hot-toast";
 
 const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
-  const { isAuthorized,  } = useContext(Context);
+  // const { isAuthorized,setIsAuthorized  } = useContext(Context);  // Assume you have a logout function in your context.
+  // const navigate = useNavigate()
 
+  const location = useLocation();
 
- 
+  
+
+  // Check if '/admin' is part of the current path
+  if (location.pathname.includes("/admin")) {
+    return null;  // Hide the Navbar if '/admin' is in the URL
+  }
+
+  //  const handleLogout = async () => {
+  //     try {
+  //       const response = await axios.post("/api/logout", {}, { withCredentials: true });
+  //       toast.success(response.data.message);
+  //       setIsAuthorized(false);
+  //       navigate("/login");
+  //     } catch (error) {
+  //       toast.error(error.response?.data?.message || "Logout failed");
+  //     }
+  //   };
 
   return (
-    <nav className={`bg-white border-gray-200 dark:bg-gray-900 ${isAuthorized ? "hidden" : ""}`}>
-
+    <nav className="bg-white border-gray-200 dark:bg-gray-900">
       <div className="max-w-screen-2xl flex flex-wrap items-center justify-between mx-auto p-4">
         {/* Logo and Title */}
         <Link to="/" className="flex items-center space-x-3 rtl:space-x-reverse flex-nowrap">
@@ -25,16 +45,24 @@ const Navbar = () => {
           </span>
         </Link>
 
-        {/* Login Button and Menu Toggle Button */}
+        {/* Login/Logout Button and Mobile Menu Toggle Button */}
         <div className="flex md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
-          
+
+          {/* {isAuthorized ? (
+            <button
+              onClick={handleLogout}  // Trigger logout function here
+              className="text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-4 py-2 text-center  dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800"
+            >
+              LOGOUT
+            </button>
+          ) : (
             <Link
               to="/login"
               className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 text-center lg:text-xl dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
             >
               LOGIN
             </Link>
-          
+          )} */}
 
           {/* Mobile Menu Toggle Button */}
           <button
@@ -61,10 +89,7 @@ const Navbar = () => {
                 COURSE
               </Link>
             </li>
-
-
-
-            <li>
+           <li>
               <Link to="/blog" className="block py-2 px-3 md:p-0 text-gray-900 rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700 ">
                 BLOG
               </Link>
