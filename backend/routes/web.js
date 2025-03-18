@@ -14,6 +14,7 @@ router.post("/signUp", UserController.signUp);
 router.post("/signIn", UserController.signIn);
 router.get("/getUser",verifyToken, UserController.getUser);
 router.post("/logout",verifyToken,UserController.logout)
+router.post("/changepassword", UserController.changePassword)
 
 //Message English ROUTES
 router.post("/insertText",verifyToken, TextController.InsertText);

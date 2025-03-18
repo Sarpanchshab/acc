@@ -148,5 +148,57 @@ class UserController {
     }
   };
 
+  static changePassword = async (req, res) => {
+    try {
+      const { email, oldPassword, newPassword, confirmNewPassword } = req.body;
+  
+      // Check if all fields are filled
+      if (!email || !oldPassword || !newPassword || !confirmNewPassword) {
+        return res
+          .status(400)
+          .json({ status: "failed", message: "All fields are required!" });
+      }
+  
+      // Check if new passwords match
+      if (newPassword !== confirmNewPassword) {
+        return res
+          .status(400)
+          .json({ status: "failed", message: "New passwords do not match" });
+      }
+  
+      // Find user by email
+      const user = await UserModel.findOne({ email: email });
+      if (!user) {
+        return res
+          .status(400)
+          .json({ status: "failed", message: "User not found" });
+      }
+  
+      // Check old password
+      const isMatch = await bcrypt.compare(oldPassword, user.password);
+      if (!isMatch) {
+        return res
+          .status(400)
+          .json({ status: "failed", message: "Old password is incorrect" });
+      }
+  
+      // Hash new password
+      const hashedNewPassword = await bcrypt.hash(newPassword, 10);
+      user.password = hashedNewPassword;
+      await user.save();
+  
+      return res.status(200).json({
+        status: "success",
+        message: "Password changed successfully",
+      });
+    } catch (error) {
+      console.error(error);
+      return res
+        .status(500)
+        .json({ status: "failed", message: "Internal server error" });
+    }
+  };
+  
+
 }
 module.exports = UserController;

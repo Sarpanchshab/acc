@@ -1,11 +1,11 @@
 import { useEffect,useState,useRef } from "react";
 import { Link, useLocation, } from "react-router-dom";
 
-// import {useNavigate} from "react-router-dom"
-// import { Context } from "../../main";
-// import { useContext } from "react";
-// import axios from 'axios'
-// import toast from "react-hot-toast";
+import {useNavigate} from "react-router-dom"
+import { Context } from "../../main";
+import { useContext } from "react";
+import axios from 'axios'
+import toast from "react-hot-toast";
 
 const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -27,8 +27,8 @@ const Navbar = () => {
     };
   }, []);
 
-  // const { isAuthorized,setIsAuthorized  } = useContext(Context);  // Assume you have a logout function in your context.
-  // const navigate = useNavigate()
+  const { isAuthorized,setIsAuthorized  } = useContext(Context);  // Assume you have a logout function in your context.
+  const navigate = useNavigate()
 
   const location = useLocation();
 
@@ -39,16 +39,16 @@ const Navbar = () => {
     return null;  // Hide the Navbar if '/admin' is in the URL
   }
 
-  //  const handleLogout = async () => {
-  //     try {
-  //       const response = await axios.post("/api/logout", {}, { withCredentials: true });
-  //       toast.success(response.data.message);
-  //       setIsAuthorized(false);
-  //       navigate("/login");
-  //     } catch (error) {
-  //       toast.error(error.response?.data?.message || "Logout failed");
-  //     }
-  //   };
+   const handleLogout = async () => {
+      try {
+        const response = await axios.post("/api/logout", {}, { withCredentials: true });
+        toast.success(response.data.message);
+        setIsAuthorized(false);
+        navigate("/login");
+      } catch (error) {
+        toast.error(error.response?.data?.message || "Logout failed");
+      }
+    };
 
   return (
     <nav className="bg-white border-gray-200 dark:bg-gray-900">
@@ -64,7 +64,7 @@ const Navbar = () => {
         {/* Login/Logout Button and Mobile Menu Toggle Button */}
         <div className="flex md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
 
-          {/* {isAuthorized ? (
+          {isAuthorized ? (
             <button
               onClick={handleLogout}  // Trigger logout function here
               className="text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-4 py-2 text-center  dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800"
@@ -74,11 +74,11 @@ const Navbar = () => {
           ) : (
             <Link
               to="/login"
-              className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 text-center lg:text-xl dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+              className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300  rounded-lg text-sm px-4 py-2 text-center lg:text-xl dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
             >
-              LOGIN
+             ADMIN
             </Link>
-          )} */}
+          )}
 
           {/* Mobile Menu Toggle Button */}
           <button

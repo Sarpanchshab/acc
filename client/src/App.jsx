@@ -17,6 +17,7 @@ import AdminPanel from './component/Admin Dashboard/AdminPanel'
 import { Toaster } from 'react-hot-toast'
 import HindiTypingInstruction from './component/Typing/HindiTypingInstruction'
 import NotFound from './component/NotFound'
+import ChangePassword from './component/Auth/ChangePassword'
 
 
 
@@ -34,6 +35,7 @@ function App() {
         <Route path='/englishtyping' element={<EnglishTyping />} />
         <Route path='/login' element={<Login />} />
         <Route path='/register' element={<Register />} />
+        <Route path='/changepassword' element={<ChangePassword/>}/>
         <Route path='/getNumberCourse' element={<LatestCourse />} />
         <Route path='/contact' element={<Contact />} />
         <Route path='/blog' element={<Blog />} />

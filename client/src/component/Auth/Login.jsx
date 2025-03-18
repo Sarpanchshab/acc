@@ -101,7 +101,9 @@ function Login() {
               />
               <span className="text-sm text-gray-600">Remember Me</span>
             </label>
-            <a href="#" className="text-sm text-blue-600 hover:underline">Forgot Password?</a>
+
+            <Link to="/changepassword" className="text-sm text-blue-600 hover:underline">Change Password</Link>
+            
           </div>
 
           <button
