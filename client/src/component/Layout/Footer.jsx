@@ -1,18 +1,16 @@
-import { useLocation } from "react-router-dom";
-
+import { useLocation, Link } from "react-router-dom";
 import {
-  FaFacebookF, FaTwitter, FaInstagram, FaLinkedinIn,
+  FaFacebookF,  FaInstagram, FaYoutube, FaTelegramPlane,
   FaMapMarkerAlt, FaPhoneAlt, FaEnvelope, FaGlobe
 } from "react-icons/fa";
 
- const Footer = () => {
+const Footer = () => {
 
+  const location = useLocation();
 
-  const location = useLocation()
-
-  // Check if '/admin' is part of the current path
+  // Hide footer in admin route
   if (location.pathname.includes("/admin")) {
-    return null;  // Hide the Navbar if '/admin' is in the URL
+    return null;
   }
 
   return (
@@ -21,25 +19,25 @@ import {
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-10">
 
           {/* About Section */}
-          <div className="transition-transform transform hover:scale-105">
+          <div className="transition-transform hover:scale-105">
             <h4 className="text-xl font-semibold mb-4 border-b-2 border-blue-500 pb-2">About Us</h4>
-            <p className=" text-white">We provide top-notch educational resources to help students and professionals excel in their careers.</p>
+            <p className="text-gray-300">We provide top-notch educational resources to help students and professionals excel in their careers.</p>
           </div>
 
           {/* Quick Links */}
-          <div className="transition-transform transform hover:scale-105">
+          <div className="transition-transform hover:scale-105">
             <h4 className="text-xl font-semibold mb-4 border-b-2 border-blue-500 pb-2">Quick Links</h4>
             <ul className="space-y-3">
               {['Home', 'Courses', 'Events', 'Sitemap', 'Privacy Policy', 'Terms of Use'].map((item, index) => (
                 <li key={index}>
-                  <a href="#" className="hover:text-blue-400 transition duration-300">{item}</a>
+                  <Link to="#" className="hover:text-blue-400 transition duration-300">{item}</Link>
                 </li>
               ))}
             </ul>
           </div>
 
           {/* Newsletter */}
-          <div className="transition-transform transform hover:scale-105">
+          <div className="transition-transform hover:scale-105">
             <h4 className="text-xl font-semibold mb-4 border-b-2 border-blue-500 pb-2">Newsletter</h4>
             <p className="text-gray-400">Subscribe to get the latest news and updates.</p>
             <form className="mt-4 flex bg-white rounded-md overflow-hidden">
@@ -48,18 +46,18 @@ import {
                 placeholder="Your Email"
                 className="w-full px-4 py-2 text-black outline-none"
               />
-              <button type="submit" className="bg-blue-600 rounded-md hover:bg-blue-700 px-4 py-2 text-white font-medium transition-transform transform hover:scale-105">
+              <button type="submit" className="bg-blue-600 hover:bg-blue-700 px-4 py-2 text-white font-medium transition-transform hover:scale-105">
                 Subscribe
               </button>
             </form>
           </div>
 
           {/* Contact */}
-          <div className="transition-transform transform hover:scale-105">
+          <div className="transition-transform hover:scale-105">
             <h4 className="text-xl font-semibold mb-4 border-b-2 border-blue-500 pb-2">Contact Us</h4>
             <p className="flex items-center space-x-2 text-gray-400">
               <FaMapMarkerAlt className="text-blue-400" />
-              <span className="text-white">Infront of Dr. M.D. Gupta, Rajeshwari Road, Shivpuri, MP</span>
+              <span>Infront of Dr. M.D. Gupta, Rajeshwari Road, Shivpuri, MP</span>
             </p>
             <p className="flex items-center space-x-2 mt-2">
               <FaPhoneAlt className="text-blue-400" />
@@ -76,24 +74,27 @@ import {
 
             {/* Social Icons */}
             <div className="flex space-x-4 mt-4">
-              {[FaFacebookF, FaTwitter, FaInstagram, FaLinkedinIn].map((Icon, index) => (
-                <a key={index} href="#" className=" hover:text-blue-400 transition-transform transform hover:scale-125 text-xl text-white">
-                  <Icon />
+              {[{ icon: FaFacebookF, link: 'https://www.facebook.com/p/Advance-Computer-classes-100063564147035/' },
+              { icon: FaInstagram, link: 'https://www.instagram.com/japun_prajapati33/' },
+              { icon: FaYoutube, link: 'https://www.youtube.com/c/AdvancedComputerClasses' },
+              { icon: FaTelegramPlane, link: 'https://t.me/advancedcomputerclass' }].map((social, index) => (
+                <a key={index} href={social.link} target="_blank" rel="noopener noreferrer" className="hover:text-blue-400 transition-transform hover:scale-125 text-xl">
+                  <social.icon />
                 </a>
               ))}
             </div>
+
           </div>
         </div>
 
         {/* Footer Bottom */}
-        <div className="mt-12 border-t border-gray-700 pt-6 text-center relative z-10">
-          <p>&copy; {new Date().getFullYear()} All Rights Reserved Designed with <a href="" rel="nofollow" className="text-blue-400 hover:underline">Privacy & Policy</a></p>
+        <div className="mt-12 border-t border-gray-700 pt-6 text-center relative z-10 text-gray-400">
+          <p>&copy; {new Date().getFullYear()} All Rights Reserved | Designed with ❤️ | <Link to="#" className="text-blue-400 hover:underline">Privacy & Policy</Link></p>
         </div>
       </div>
 
       {/* Glassmorphism Background */}
       <div className="absolute top-0 left-0 w-full h-full bg-opacity-30 backdrop-blur-md z-0"></div>
-
     </footer>
   );
 };

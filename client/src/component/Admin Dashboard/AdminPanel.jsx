@@ -20,6 +20,9 @@ import BlogDisplay from "./Blog/BlogDisplay";
 import HindiText from "./Typing/HindiText";
 import EnglishText from "./Typing/EnglishText";
 import ContactDisplay from "./Contact/ContactDisplay";
+import EditHindiText from "./Typing/EditHindiText";
+import EditEnglishText from "./Typing/EditEnglishText";
+import SliderImage from "./Slider/SliderImage";
 
 const AdminPanel = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -87,6 +90,17 @@ const AdminPanel = () => {
               <span>Dashboard</span>
             </li>
 
+            {/* Slider Image Change */}
+
+            <li
+              className="flex items-center space-x-2 p-2 rounded cursor-pointer text-white hover:bg-gray-700"
+              onClick={() => handleMenuClick("sliderimage")}
+            >
+              <MdCircle className="text-xs text-white" />  {/* White Circle */}
+              <span>Slider Image</span>
+            </li>
+
+
             {/* Course Dropdown */}
             <li className="p-2 hover:bg-gray-700 rounded cursor-pointer">
               <div
@@ -138,12 +152,12 @@ const AdminPanel = () => {
               {blogDropdownOpen && (
                 <ul className="mt-2 ml-4 space-y-2">
                   <li className="flex items-center space-x-2 p-2 hover:bg-gray-600 rounded cursor-pointer"
-                  onClick={() => handleMenuClick("blogInsert")}>
+                    onClick={() => handleMenuClick("blogInsert")}>
                     <MdCircle className="text-xs" />
                     <span>Blog Insert</span>
                   </li>
                   <li className="flex items-center space-x-2 p-2 hover:bg-gray-600 rounded cursor-pointer"
-                  onClick={() => handleMenuClick("blogEdit")}>
+                    onClick={() => handleMenuClick("blogEdit")}>
                     <MdCircle className="text-xs" />
                     <span>Blog Edit</span>
                   </li>
@@ -168,23 +182,35 @@ const AdminPanel = () => {
               {typingDropdownOpen && (
                 <ul className="mt-2 ml-4 space-y-2">
                   <li className="flex items-center space-x-2 p-2 hover:bg-gray-600 rounded cursor-pointer"
-                  onClick={() => handleMenuClick("hindiText")}>
+                    onClick={() => handleMenuClick("hindiText")}>
                     <MdCircle className="text-xs" />
-                    <span>Hindi Typing</span>
+                    <span>Insert Hindi Text</span>
                   </li>
                   <li className="flex items-center space-x-2 p-2 hover:bg-gray-600 rounded cursor-pointer"
-                  onClick={() => handleMenuClick("englishText")}>
+                    onClick={() => handleMenuClick("EditHindiText")}>
                     <MdCircle className="text-xs" />
-                    <span>English Typing</span>
+                    <span>Edit Hindi Text</span>
+                  </li>
+                  <li className="flex items-center space-x-2 p-2 hover:bg-gray-600 rounded cursor-pointer"
+                    onClick={() => handleMenuClick("englishText")}>
+                    <MdCircle className="text-xs" />
+                    <span>Insert English Text</span>
+                  </li>
+                  <li className="flex items-center space-x-2 p-2 hover:bg-gray-600 rounded cursor-pointer"
+                    onClick={() => handleMenuClick("editenglishText")}>
+                    <MdCircle className="text-xs" />
+                    <span>Edit English Text</span>
                   </li>
                 </ul>
               )}
             </li>
 
+
+
             {/* Contact Messages */}
             <li
-              className="p-2 rounded cursor-pointer  bg-gray-600 text-white" 
-                onClick={() => handleMenuClick("contactMessage")}
+              className="p-2 rounded cursor-pointer  bg-gray-600 text-white"
+              onClick={() => handleMenuClick("contactMessage")}
             >
               <span>📩 Contact Messages</span>
             </li>
@@ -221,7 +247,10 @@ const AdminPanel = () => {
           {selectedComponent === "blogInsert" && <BlogInsert />}
           {selectedComponent === "blogEdit" && <BlogDisplay />}
           {selectedComponent === "hindiText" && <HindiText />}
+          {selectedComponent === "EditHindiText" && <EditHindiText />}
           {selectedComponent === "englishText" && <EnglishText />}
+          {selectedComponent === "editenglishText" && <EditEnglishText />}
+          {selectedComponent === "sliderimage" && <SliderImage />}
           {selectedComponent === "contactMessage" && <ContactDisplay />}
         </div>
       </div>

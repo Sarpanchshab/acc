@@ -1,9 +1,11 @@
 import { useState, useEffect, useRef } from "react";
 import axios from "axios";
+import Marquee from "react-fast-marquee";
+import { Link } from "react-router";
 
 const HindiTypingTest = () => {
   const [textSamples, setTextSamples] = useState([]);
-  const [ setTextIndex] = useState(0);
+  const [setTextIndex] = useState(0);
   const [text, setText] = useState("");
   const [input, setInput] = useState("");
   const [selectedTime, setSelectedTime] = useState(1);
@@ -21,6 +23,8 @@ const HindiTypingTest = () => {
   const itemsPerPage = 1; // One text per page
   const [currentPage, setCurrentPage] = useState(1);
   const totalPages = Math.ceil(textSamples.length / itemsPerPage);
+
+  const [showMarquee, setShowMarquee] = useState(true);
 
   useEffect(() => {
     axios.get("/api/getAllHindiText")
@@ -103,9 +107,30 @@ const HindiTypingTest = () => {
   return (
     <div className="flex flex-col items-center min-h-screen bg-gray-100 p-6 w-full">
       <div className="bg-white shadow-lg rounded-lg p-6 w-11/12">
-        <h1 className="text-3xl font-bold text-center text-blue-600 mb-4">
-          Hindi Typing Practice
-        </h1>
+        <div className="flex flex-col space-y-4 px-4 md:px-8">
+          <h1 className="text-2xl md:text-3xl font-bold text-center text-blue-600">
+            Hindi Typing Practice
+          </h1>
+
+          {showMarquee && (
+        <Marquee pauseOnHover={true} gradient={false}>
+          <Link
+            to="/hinditypinginstruction"
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={() => setShowMarquee(false)} // Hide when clicked
+            className="text-base sm:text-lg md:text-xl lg:text-2xl font-bold bg-yellow-400 text-black hover:text-blue-600 cursor-pointer p-2 rounded"
+          >
+            !! IMPORTANT INSTRUCTION FOR PRACTICE HINDI TYPING IF DONE IGNORE IT !!
+          </Link>
+        </Marquee>
+      )}
+
+        </div>
+
+
+
+
 
         {!started && (
           <div className="mb-4 flex justify-center items-center space-x-4">
@@ -138,15 +163,14 @@ const HindiTypingTest = () => {
               <span
                 key={i}
                 ref={isCurrentWord ? currentWordRef : null}
-                className={`mr-2 ${
-                  isCurrentWord
-                    ? "bg-yellow-300 text-black font-bold"
-                    : input.split(" ")[i] === word
+                className={`mr-2 ${isCurrentWord
+                  ? "bg-yellow-300 text-black font-bold"
+                  : input.split(" ")[i] === word
                     ? "text-green-500"
                     : incorrectWords.includes(i)
-                    ? "text-red-500"
-                    : "text-gray-900"
-                }`}
+                      ? "text-red-500"
+                      : "text-gray-900"
+                  }`}
               >
                 {word}
               </span>
@@ -164,7 +188,7 @@ const HindiTypingTest = () => {
 
         <p className="mt-4 text-center text-lg font-semibold text-gray-800">
           ⏳ Time Left: {time}s | 📝 Typed: {totalTypedChars} chars |
-          ❌ Errors: {errors} | 🎯 Accuracy: {accuracy}% | 🚀 Gross WPM: {grossWPM} | 
+          ❌ Errors: {errors} | 🎯 Accuracy: {accuracy}% | 🚀 Gross WPM: {grossWPM} |
           🏆 Net WPM: {netWPM}
         </p>
 
@@ -188,11 +212,10 @@ const HindiTypingTest = () => {
               <button
                 key={pageNum}
                 onClick={() => handlePageChange(pageNum)}
-                className={`px-3 py-1 rounded-md ${
-                  currentPage === pageNum
-                    ? "bg-blue-500 text-white"
-                    : "bg-gray-300 text-black"
-                }`}
+                className={`px-3 py-1 rounded-md ${currentPage === pageNum
+                  ? "bg-blue-500 text-white"
+                  : "bg-gray-300 text-black"
+                  }`}
               >
                 {pageNum}
               </button>

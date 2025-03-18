@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { Link, useLocation,  } from "react-router-dom";
+import { useEffect,useState,useRef } from "react";
+import { Link, useLocation, } from "react-router-dom";
 
 // import {useNavigate} from "react-router-dom"
 // import { Context } from "../../main";
@@ -11,12 +11,28 @@ const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
+  const dropdownRef = useRef(null); // Step 1: Ref for dropdown
+
+  // Step 2: Close dropdown when clicked outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setIsDropdownOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
   // const { isAuthorized,setIsAuthorized  } = useContext(Context);  // Assume you have a logout function in your context.
   // const navigate = useNavigate()
 
   const location = useLocation();
 
-  
+
 
   // Check if '/admin' is part of the current path
   if (location.pathname.includes("/admin")) {
@@ -89,7 +105,7 @@ const Navbar = () => {
                 COURSE
               </Link>
             </li>
-           <li>
+            <li>
               <Link to="/blog" className="block py-2 px-3 md:p-0 text-gray-900 rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700 ">
                 BLOG
               </Link>
@@ -101,16 +117,17 @@ const Navbar = () => {
             </li>
 
             {/* Typing Link with Dropdown */}
-            <li className="relative">
+            <li className="relative" ref={dropdownRef}>
               <button
                 onClick={() => setIsDropdownOpen(!isDropdownOpen)}
                 className="flex items-center justify-between w-full py-2 px-3 text-gray-900 rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 md:w-auto dark:text-white md:dark:hover:text-blue-500 dark:focus:text-white dark:border-gray-700 dark:hover:bg-gray-700 md:dark:hover:bg-transparent "
               >
                 TYPING
-                <svg className="w-2.5 h-2.5 ml-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                <svg className="w-2.5 h-2.5 ml-2.5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
                   <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 1 4 4 4-4" />
                 </svg>
               </button>
+
               {isDropdownOpen && (
                 <div className="absolute z-10 mt-2 w-44 bg-white divide-y divide-gray-100 rounded-lg shadow-sm dark:bg-blue-600 dark:divide-gray-600">
                   <ul className="py-2 text-sm text-gray-700 dark:text-white">
@@ -128,6 +145,7 @@ const Navbar = () => {
                 </div>
               )}
             </li>
+
           </ul>
         </div>
       </div>

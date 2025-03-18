@@ -7,6 +7,7 @@ function CourseInsert() {
     title: "",
     duration: "",
     price: "",
+    buylink:"",
     image: null,
   });
 
@@ -28,6 +29,7 @@ function CourseInsert() {
     data.append("title", formData.title);
     data.append("duration", formData.duration);
     data.append("price", formData.price);
+    data.append("buylink", formData.buylink);
     data.append("image", formData.image);
 
     try {
@@ -91,6 +93,19 @@ function CourseInsert() {
               placeholder="Enter price"
               required
               value={formData.price}
+              onChange={handleChange}
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700">Buy Link</label>
+            <input
+              type="text"
+              name="buylink"
+              className="w-full mt-1 p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400 focus:outline-none"
+              placeholder="Enter price"
+              required
+              value={formData.buylink}
               onChange={handleChange}
             />
           </div>

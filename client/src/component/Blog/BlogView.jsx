@@ -39,7 +39,7 @@ const BlogView = () => {
       {post && (
         <>
           {/* Post Title */}
-          <h1 className="text-3xl font-bold mb-4 underline text-red-500">
+          <h1 className="text-3xl font-bold mb-4 underline ">
             {post.name || "No Title Available"}
           </h1>
   
@@ -61,9 +61,11 @@ const BlogView = () => {
   
           {/* Apply Form */}
           {post.applyForm && (
-            <p className="text-lg leading-relaxed text-gray-700">
+            <p className="text-lg leading-relaxed text-blue-500">
               <span className="font-semibold text-gray-800">Apply Form: </span>
-              {post.applyForm}
+              <a href={post.applyForm} className="underline" target="_blank" rel="noopener noreferrer">
+                {post.applyForm}
+              </a>
             </p>
           )}
   

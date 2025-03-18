@@ -1,21 +1,30 @@
 import React from 'react';
+/* eslint-disable no-unused-vars */
+import { motion } from 'framer-motion'; // Import motion
+/* eslint-enable no-unused-vars */
 
 function OurFeatures() {
     return (
-        <section id="mu-features" className="py-12 bg-gray-100">
+        <section id="mu-features" className="py-12 bg-blue-400">
             <div className="container mx-auto px-4">
                 <div className="text-center mb-12">
-                    <h2 className="text-3xl font-bold text-gray-800 uppercase"> Our Features</h2>
-                    {/* <p className="text-gray-600 mt-2">Prepare for CPCT and other government exams with expert-led training in Hindi and English typing, computer proficiency, and interactive learning sessions.</p> */}
+                    <h2 className="text-3xl font-bold text-white uppercase"> Our Features</h2>
                 </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div className="grid grid-cols- md:grid-cols-2 lg:grid-cols-3 gap-6">
                     {features.map((feature, index) => (
-                        <div key={index} className="bg-white shadow-lg rounded-lg p-6 text-center">
+                        <motion.div 
+                            key={index}
+                            className="bg-white shadow-lg rounded-lg p-6 text-center"
+                            initial={{ opacity: 0, y: 50 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.5, delay: index * 0.4 }}
+                            viewport={{ once: true }}
+                        >
                             <span className={`text-4xl text-blue-500 ${feature.icon}`}></span>
                             <h4 className="text-xl font-semibold text-gray-800 mt-4">{feature.title}</h4>
                             <p className="text-gray-600 mt-2">{feature.description}</p>
                             <a href="#" className="text-blue-500 font-medium mt-4 inline-block hover:underline">Read More</a>
-                        </div>
+                        </motion.div>
                     ))}
                 </div>
             </div>
