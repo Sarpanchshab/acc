@@ -2,11 +2,11 @@ const ContactModel = require("../model/ContactModel");
 class ContactController {
   static InsertMessage = async (req, res) => {
     try {
-      const { name, email, city,address, message } = req.body;
+      const { name, email, city, address, message } = req.body;
       const data = new ContactModel({
         name: name,
-        city:city,
-        address:address,
+        city: city,
+        address: address,
         email: email,
         message: message,
       });
@@ -34,6 +34,34 @@ class ContactController {
       res.send(error);
     }
   };
+
+  static DeleteMessage = async (req, res) => {
+    try {
+      const { id } = req.params;
+      const deletedMessage = await ContactModel.findByIdAndDelete(id);
+
+      if (!deletedMessage) {
+        return res.status(404).json({
+          status: false,
+          message: "Message not found!"
+        });
+      }
+
+      res.status(200).json({
+        status: true,
+        message: "Message deleted successfully",
+      });
+
+    } catch (error) {
+      res.status(500).json({
+        status: false,
+        message: "Server error",
+        error: error.message
+      });
+    }
+  }
+
 }
+
 
 module.exports = ContactController;

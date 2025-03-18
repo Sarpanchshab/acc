@@ -10,11 +10,12 @@ class CourseController {
         folder: "CourseImage",
       });
 
-      const { title, duration, price } = req.body;
+      const { title, duration, price ,buylink } = req.body;
       const data = new CourseModel({
         title: title,
         duration: duration,
         price: price,
+        buylink:buylink,
         image: {
           public_id: myCloud.public_id,
           url: myCloud.secure_url,

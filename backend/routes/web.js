@@ -6,6 +6,7 @@ const TextHindiController = require("../Controllers/HindiTextControlller");
 const CourseController = require("../Controllers/CourseController");
 const BlogController = require("../Controllers/BlogController");
 const ContactController = require("../Controllers/ContactController");
+const SliderController = require("../Controllers/SliderController");
 const router = express.Router();
 
 //User Routes
@@ -41,5 +42,11 @@ router.delete("/deleteBlog/:id", BlogController.DeleteBlog);
 // Contact Controller
 router.post("/insertcontact", ContactController.InsertMessage);
 router.get("/getallmessage",ContactController.GetAllMessage)
+router.delete("/deletemessage/:id",ContactController.DeleteMessage)
+
+// Slider Controller
+router.post("/insertimage", SliderController.insertImage)
+router.delete("/deleteimage/:id", SliderController.deleteImage)
+router.get("/viewallimage",SliderController.viewAllImages)
 
 module.exports = router;

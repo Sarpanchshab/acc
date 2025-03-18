@@ -15,6 +15,10 @@ const CourseSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    buylink: {
+      type: String,
+      required: true
+    },
     image: {
       public_id: {
         type: String,
